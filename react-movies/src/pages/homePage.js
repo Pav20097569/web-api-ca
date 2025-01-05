@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { getMovies } from "../api/tmdb-api";
-import PageTemplate from '../components/templateMovieListPage';
 import { useQuery } from 'react-query';
+import { fetchMovies } from '../api/axios'; 
+import PageTemplate from '../components/templateMovieListPage';
 import Spinner from '../components/spinner';
-import AddToFavoritesIcon from '../components/cardIcons/addToFavorites'
+import AddToFavoritesIcon from '../components/cardIcons/addToFavorites';
 import styled from 'styled-components'; // Import styled-components
 
 // Styled Components
@@ -39,14 +39,15 @@ const HomePage = (props) => {
   const MOVIES_PER_PAGE = 10; 
   const [page, setPage] = useState(1); // Manage Current Page State
 
-  const { data, error, isLoading, isError } = useQuery(['discover', { page }], getMovies);
+  // Fetching movies using React Query and Axios
+  const { data, error, isLoading, isError } = useQuery(['discover', { page }], fetchMovies);
 
   if (isLoading) return <Spinner />;
   if (isError) return <h1>{error.message}</h1>;
 
   const movies = data.results;
 
-  // Calculate the movies to display on the current page
+  // Pagination logic
   const startIndex = (page - 1) * MOVIES_PER_PAGE;
   const endIndex = startIndex + MOVIES_PER_PAGE;
   const displayedMovies = movies.slice(startIndex, endIndex);
@@ -73,7 +74,7 @@ const HomePage = (props) => {
       <PageTemplate
         title="Discover Movies"
         movies={displayedMovies} // Pass only the limited movies to PageTemplate
-        action={(movie) => <AddToFavoritesIcon movie={movie} />}
+        action={(movie) => <AddToFavoritesIcon movie={movie} />} // Handle adding to favorites
       />
       <Pagination>
         <Button onClick={handlePreviousPage} disabled={page === 1}>
