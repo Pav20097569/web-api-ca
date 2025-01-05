@@ -21,4 +21,16 @@ router.post('/add', asyncHandler(async (req, res) => {
     }
 }));
 
+
+// Endpoint to fetch all actors
+router.get('/', asyncHandler(async (req, res) => {
+    try {
+        const actors = await Actor.find();
+        res.status(200).json({ status: 'success', data: actors });
+    } catch (error) {
+        res.status(500).json({ status: 'error', message: 'Failed to fetch actors', error: error.message });
+    }
+}));
+
+
 export default router;
