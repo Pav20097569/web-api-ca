@@ -6,6 +6,7 @@ import Spinner from "../components/spinner";
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd'; 
 import { MoviesContext } from '../contexts/moviesContext';
 import styled from 'styled-components'; // Import styled-components for pagination
+import { fetchUpcomingMovies } from "../api/axios";
 
 // Styled Components for Pagination
 const Pagination = styled.div`
@@ -30,7 +31,9 @@ const PageIndicator = styled.span`
 `;
 
 const UpcomingMoviesPage = () => {
-  const { data, error, isLoading, isError } = useQuery("upcomingMovies", () => getUpcomingMovies(1));
+  //const { data, error, isLoading, isError } = useQuery("upcomingMovies", () => getUpcomingMovies(1));
+  const { data, error, isLoading, isError } = useQuery('upcomingMovies', fetchUpcomingMovies);
+
   const { addToMustWatch } = useContext(MoviesContext); 
 
   // State for pagination

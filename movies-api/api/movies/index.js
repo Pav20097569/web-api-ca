@@ -44,8 +44,12 @@ router.get('/:id', asyncHandler(async (req, res) => {
 
 // Get upcoming movies from TMDB
 router.get('/tmdb/upcoming', asyncHandler(async (req, res) => {
-    const upcomingMovies = await getUpcomingMovies();
-    res.status(200).json(upcomingMovies);
+    try {
+        const upcomingMovies = await getUpcomingMovies(); // Fetch the movies from TMDB
+        res.status(200).json({ status: 'success', data: upcomingMovies});
+    } catch (error) {
+        res.status(500).json({ status: 'error', message: 'Failed to fetch upcoming movies', error: error.message });
+    }
 }));
 
 // Fetch movie genres from TMDB

@@ -17,13 +17,12 @@ export const fetchMovies = async () => {
   }
 };
 
-// Function to fetch actors
-export const fetchActors = async () => {
+// Function to fetch upcoming movies from the backend
+export const fetchUpcomingMovies = async () => {
   try {
-    const response = await api.get('/actors');
-    return response.data; 
+    const response = await axios.get('/upcoming');
+    return response.data.data; // The TMDb API response contains the movie data in 'data'
   } catch (error) {
-    console.error('Error fetching actors:', error);
-    throw error; 
+    throw new Error('Error fetching upcoming movies');
   }
 };

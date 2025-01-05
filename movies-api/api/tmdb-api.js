@@ -4,38 +4,47 @@ import fetch from 'node-fetch';
 export const getUpcomingMovies = async () => {
     try {
         const response = await fetch(
-            `https://api.themoviedb.org/3/movie/upcoming?api_key=${process.env.TMDB_KEY}&language=en-US&page=1`
+            `https://api.themoviedb.org/3/movie/upcoming?api_key=${process.env.TMDB_KEY}&language=en-US`
         );
 
         if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(errorData.message);
+            throw new Error(errorData.status_message || "An error occurred while fetching the upcoming movies.");
         }
 
-        return await response.json();
+        return await response.json(); // Return the full response
     } catch (error) {
-        throw error;
+        throw new Error(error.message || "Failed to fetch upcoming movies.");
     }
 };
 
 // Fetch genres from TMDB
 export const getGenres = async () => {
     try {
+       
         const response = await fetch(
             `https://api.themoviedb.org/3/genre/movie/list?api_key=${process.env.TMDB_KEY}&language=en-US`
         );
 
+        // If the response is not OK (not status 200), throw an error
         if (!response.ok) {
             const errorData = await response.json();
+            console.error("Error fetching genres:", errorData.message); // Log the error message
             throw new Error(errorData.message);
         }
 
+        // Parse the response to JSON if the request is successful
         const data = await response.json();
-        return data.genres; // Return only the genres array
+        
+        // Return only the genres array to simplify further usage
+        return data.genres;
     } catch (error) {
+        // Log the error for debugging purposes
+        console.error("Error occurred while fetching genres:", error);
         throw error;
     }
 };
+
 
 
 // Fetch movies by title from TMDB
@@ -134,3 +143,4 @@ export const getMoviesByPersonId = async (personId) => {
         throw error;
     }
 };
+

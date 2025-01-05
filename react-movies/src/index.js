@@ -25,6 +25,7 @@ import SearchResultsPage from "./pages/searchResultsPage";
 
 
 
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
