@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import Actor from './actorModel'; // Import the Actor model
+import Actor from '../actors/actorModel.js'; // Import the Actor model
 
 const Schema = mongoose.Schema;
 
