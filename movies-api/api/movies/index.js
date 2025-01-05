@@ -4,6 +4,7 @@ import express from 'express';
 import { getUpcomingMovies, getGenres } from '../tmdb-api'; // Import getGenres from tmdb-api
 import { searchMoviesByTitle } from '../tmdb-api';
 import { getMoviesByLanguage } from '../tmdb-api'; // Import getMoviesByLanguage
+import { getMoviesByDate } from '../tmdb-api';
 
 const router = express.Router();
 
@@ -90,5 +91,20 @@ router.get('/tmdb/language', asyncHandler(async (req, res) => {
     }
 }));
 
+// Fetch movies by release date from TMDB
+router.get('/tmdb/releasedates', asyncHandler(async (req, res) => {
+    const { startDate, endDate } = req.query; // Extract startDate and endDate from query parameters
+
+    if (!startDate || !endDate) {
+        return res.status(400).json({ message: 'Start date and end date are required.', status_code: 400 });
+    }
+
+    try {
+        const movies = await getMoviesByDate(startDate, endDate); // Call the TMDB API to fetch movies
+        res.status(200).json({ status: 'success', data: movies });
+    } catch (error) {
+        res.status(500).json({ status: 'error', message: 'Failed to fetch movies by release date from TMDB', error: error.message });
+    }
+}));
 
 export default router;
