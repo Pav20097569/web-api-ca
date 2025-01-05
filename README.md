@@ -6,20 +6,28 @@ Name: Pawel Jaglarz
 
 A bullet-point list of the ADDITIONAL features you have implemented in the API **THAT WERE NOT IN THE LABS** (or modifications to existing features)
  
- + Feature 1 
- + Feature 2 
- + Feature 3 
- + etc
+ + Added Api Endpoint for : Search Movie by Title, Search movie by    language, Search movie by release date and search movie by actor or director
 
-## Setup requirements.
+ + Linked Backend and front end for listing all the movies on the homepage
+ 
+ + Attempted to add actor collection to mongo but not working correctly  
+ 
+ + Authentication using firebase as having troubles with figuring out authentication using node
 
-[ Outline any non-standard setup steps necessary to run your app locally after cloning the repo.]
+ + Backend and frontend link for upcoming movies but error fetching
+
 
 ## API Configuration
 
-Describe any configuration that needs to take place before running the API. For example, creating an `.env` file and what variables to put in it. Give an example of how this might be done.
+Configurations that need to be made to run api env file example:
 
-REMEMBER: DON'T PUT YOUR OWN USERNAMES/PASSWORDS/AUTH KEYS IN THE README OR ON GITHUB, just placeholders as indicated below:
+NODE_ENV=development
+PORT=8080
+HOST=
+MONGO_DB=YourMongoURL
+TMDB_KEY=YourTMDBKey
+SECRET=YourJWTSecret
+
 
 ______________________
 NODEENV=development
@@ -31,23 +39,31 @@ secret=YourJWTSecret
 ______________________
 
 ## API Design
-Give an overview of your web API design, perhaps similar to the following: 
+Web API Design
 
-- /api/movies | GET | Gets a list of movies 
-- /api/movies/{movieid} | GET | Gets a single movie 
-- /api/movies/{movieid}/reviews | GET | Get all reviews for movie 
-- /api/movies/{movieid}/reviews | POST | Create a new review for Movie 
+GET /api/movies - Retrieve a list of movies.
 
-If you have your API design on an online platform or graphic, please link to it (e.g. [Swaggerhub](https://app.swaggerhub.com/)).
+GET /api/movies/{id} - Retrieve details of a specific movie by its ID.
 
-## Security and Authentication
+GET /api/movies/tmdb/upcoming - Fetch a list of upcoming movies from TMDB.
 
-Give details of authentication/security implemented on the API (e.g. passport/sessions). Indicate which routes are protected.
+GET /api/movies/tmdb/genres - Fetch all movie genres from TMDB.
+
+GET /api/movies/tmdb/search - Search for movies by title on TMDB.
+
+GET /api/movies/tmdb/language - Fetch movies by language from TMDB.
+
+GET /api/movies/tmdb/releasedates - Fetch movies by release dates from TMDB.
+
+GET /api/movies/tmdb/searchByPerson - Search for movies by actor or director's name.
+
 
 ## Integrating with React App
 
-Describe how you integrated your React app with the API. List the views that use your Web API instead of the TMDB API. Describe any other updates to the React app from Assignment One.
+To integrate the React app with the backend API, I utilized HTTP requests (via fetch or a library like axios) to communicate with the different routes provided by the backend. This approach allows the frontend to interact with our custom movie data, user authentication, and more, without relying entirely on the TMDB API.
+  
 
-## Independent learning (if relevant)
+Replaced TMDB API calls: The previous implementation used direct TMDB API calls to fetch movie data. Now, we fetch movie data from our custom API. Specifically, we call the /api/movies endpoint to retrieve a list of movies
 
-Briefly explain any non-standard features developed for the app.   
+Upcoming Movies: To get the list of upcoming movies, we now call /api/movies/tmdb/upcoming to fetch the latest upcoming movies from TMDB through our backend but when I click the upcoming movies button it wont show the movies but when looking through localhost for the backend it shows
+
