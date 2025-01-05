@@ -36,3 +36,23 @@ export const getGenres = async () => {
         throw error;
     }
 };
+
+
+// Fetch movies by title from TMDB
+export const searchMoviesByTitle = async (title) => {
+    try {
+        const response = await fetch(
+            `https://api.themoviedb.org/3/search/movie?api_key=${process.env.TMDB_KEY}&query=${encodeURIComponent(title)}&language=en-US&page=1` //encoded uri makes sure spaces and special characters are searched correctly
+        );
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message);
+        }
+
+        const data = await response.json();
+        return data.results; // Return the list of movies found
+    } catch (error) {
+        throw error;
+    }
+};
