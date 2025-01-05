@@ -56,3 +56,23 @@ export const searchMoviesByTitle = async (title) => {
         throw error;
     }
 };
+
+
+// Fetch movies by language from TMDB
+export const getMoviesByLanguage = async (language) => {
+    try {
+        const response = await fetch(
+            `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.TMDB_KEY}&language=${language}&page=1`
+        );
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message);
+        }
+
+        const data = await response.json();
+        return data.results; // Return the list of movies found
+    } catch (error) {
+        throw error;
+    }
+};
