@@ -95,3 +95,42 @@ export const getMoviesByDate = async (startDate, endDate) => {
         throw error;
     }
 };
+
+
+// Fetch actor/director by name from TMDB
+export const searchPersonByName = async (name) => {
+    try {
+        const response = await fetch(
+            `https://api.themoviedb.org/3/search/person?api_key=${process.env.TMDB_KEY}&query=${encodeURIComponent(name)}&language=en-US&page=1`
+        );
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message);
+        }
+
+        const data = await response.json();
+        return data.results; // Return the list of people found (actors, directors)
+    } catch (error) {
+        throw error;
+    }
+};
+
+// Fetch movies for a specific person (actor/director)
+export const getMoviesByPersonId = async (personId) => {
+    try {
+        const response = await fetch(
+            `https://api.themoviedb.org/3/person/${personId}/movie_credits?api_key=${process.env.TMDB_KEY}&language=en-US`
+        );
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message);
+        }
+
+        const data = await response.json();
+        return data.cast.concat(data.crew); // Combine actor and director roles
+    } catch (error) {
+        throw error;
+    }
+};

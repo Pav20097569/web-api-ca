@@ -5,6 +5,7 @@ import { getUpcomingMovies, getGenres } from '../tmdb-api'; // Import getGenres 
 import { searchMoviesByTitle } from '../tmdb-api';
 import { getMoviesByLanguage } from '../tmdb-api'; // Import getMoviesByLanguage
 import { getMoviesByDate } from '../tmdb-api';
+import { searchPersonByName, getMoviesByPersonId } from '../tmdb-api';
 
 const router = express.Router();
 
@@ -104,6 +105,32 @@ router.get('/tmdb/releasedates', asyncHandler(async (req, res) => {
         res.status(200).json({ status: 'success', data: movies });
     } catch (error) {
         res.status(500).json({ status: 'error', message: 'Failed to fetch movies by release date from TMDB', error: error.message });
+    }
+}));
+
+// New Endpoint - Search movies by actor or director
+router.get('/tmdb/searchByPerson', asyncHandler(async (req, res) => {
+    const { name } = req.query; // Actor or director's name passed as a query parameter
+
+    if (!name) {
+        return res.status(400).json({ message: 'Name query parameter is required.', status_code: 400 });
+    }
+
+    try {
+        // First search for the person (actor or director)
+        const people = await searchPersonByName(name);
+
+        if (people.length === 0) {
+            return res.status(404).json({ message: 'No actor or director found with that name.' });
+        }
+
+        // Fetch the movies for the first result (could be multiple people, choose one)
+        const personId = people[0].id;
+        const movies = await getMoviesByPersonId(personId);
+
+        res.status(200).json({ status: 'success', data: movies });
+    } catch (error) {
+        res.status(500).json({ status: 'error', message: 'Failed to search movies by actor or director', error: error.message });
     }
 }));
 
