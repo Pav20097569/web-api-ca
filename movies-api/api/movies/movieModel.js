@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
+import Actor from './actorModel'; // Import the Actor model
 
 const Schema = mongoose.Schema;
-
 
 const MovieSchema = new Schema({
   adult: { type: Boolean },
@@ -18,17 +18,22 @@ const MovieSchema = new Schema({
   vote_count: { type: Number },
   video: { type: Boolean },
   vote_average: { type: Number },
-  production_countries: [{
-    iso_3166_1: { type: String },
-    name: { type: String }
-  }],
+  production_countries: [
+    {
+      iso_3166_1: { type: String },
+      name: { type: String }
+    }
+  ],
   runtime: { type: Number },
-  spoken_languages: [{
-    iso_639_1: { type: String },
-    name: { type: String }
-  }],
+  spoken_languages: [
+    {
+      iso_639_1: { type: String },
+      name: { type: String }
+    }
+  ],
   status: { type: String },
-  tagline: { type: String }
+  tagline: { type: String },
+  actors: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Actor' }]  // Reference to the Actor model
 });
 
 MovieSchema.statics.findByMovieDBId = function (id) {
@@ -36,5 +41,3 @@ MovieSchema.statics.findByMovieDBId = function (id) {
 };
 
 export default mongoose.model('Movies', MovieSchema);
-
-
